@@ -1,5 +1,5 @@
-import { Component, OnInit, Output, Input } from '@angular/core';
-import { EventEmitter } from 'events';
+import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+
 
 @Component({
   selector: 'app-counter',
@@ -9,22 +9,25 @@ import { EventEmitter } from 'events';
       {{counterValue}}
       <input type='button' value="+" (click)="increment()"/>
     </p>
+    <h3>
+    Component Counter Value = {{counterComponentValue}}
+    </h3>
     
   `,
   styles: [],
-  outputs: ['counterUpdated']
+
 })
 export class CounterComponent implements OnInit {
   counterValue: number = 0;
-  counterUpdated: EventEmitter;
+  @Input() counterComponentValue = 0;
+  @Output() counterChange: EventEmitter<string>;
   @Input() counter: number;
 
   constructor() {
-    this.counterUpdated = new EventEmitter();
+    this.counterChange = new EventEmitter();
   }
 
   ngOnInit() {
-    console.log("ngOnInit");
   }
 
   ngOnChanges(changes) {
@@ -33,11 +36,11 @@ export class CounterComponent implements OnInit {
 
   increment(): void {
     this.counterValue++;
-    this.counterUpdated.emit(this.counterValue.toString());
+    this.counterChange.emit(this.counterValue.toString());
   }
 
   decrement(): void {
     this.counterValue--;
-    this.counterUpdated.emit(this.counterValue.toString());
+    this.counterChange.emit(this.counterValue.toString());
   }
 }
